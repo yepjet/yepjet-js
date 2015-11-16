@@ -1,0 +1,1 @@
+{"version":3,"sources":["index.js"],"names":[],"mappings":"AAAA,YAAY,CAAC;;;;;;;;;;;;;;kBAKE;AACb,QAAM;;AAAQ,CAEf","file":"resources/index.js","sourcesContent":["'use strict';\n\nimport Search   from './Search';\n// import Flights  from 'flights';\n\nexport default {\n  search: Search\n  // flights: Flights\n};\n"],"sourceRoot":"/source/"}
