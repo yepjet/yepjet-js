@@ -4,8 +4,10 @@ import path     from 'path';
 import ptr      from 'path-to-regexp';
 import Q        from 'q';
 import request  from 'request';
+import {NetworkError, HTTPError} from './errors';
 
 const privateProps = new WeakMap();
+
 
 class APIResource {
   constructor(conf, name) {
@@ -21,7 +23,7 @@ class APIResource {
     args.method = args.method || 'GET';
     args.path   = args.path || '';
     let uncompiledPath = path.join(this.name, args.path);
-    let uri = args.params ? ptr.compile(uncompiledPath)(args.params) : uncompiledPath;
+    let uri = ptr.compile(uncompiledPath)(args.params);
     let requestOptions = {
       method: args.method,
       baseUrl: this.baseUrl, 
@@ -33,10 +35,8 @@ class APIResource {
     switch(args.method) {
       case 'POST':
       case 'PUT':
-        if (args.data) {
-          requestOptions.json = true;
-          requestOptions.body = args.data;
-        }
+        requestOptions.json = true;
+        requestOptions.body = args.data;
         break;
       case 'GET':
         if (args.data) requestOptions.qs = args.data;
@@ -45,9 +45,9 @@ class APIResource {
 
     request(requestOptions, function(err, response, body) {
       if (err) {
-        deferred.reject(err);
+        deferred.reject(new NetworkError(err));
       } else if (!/^2\d\d$/.test(response.statusCode)) {
-        deferred.reject(body);
+        deferred.reject(new HTTPError(response.statusCode, body));
       } else {
         deferred.resolve(body);
       }
