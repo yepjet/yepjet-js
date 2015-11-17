@@ -9,8 +9,8 @@ const privateProps = new WeakMap();
 class RaF {
   constructor(key = null, host = 'http://localhost:9000/', apiVersion = 'v1') {
     privateProps.set(this, { apiKey: key, host: host, version: apiVersion }); 
-    this.search  = new Search(privateProps.get(this));
-    this.flights = new Flights(privateProps.get(this));
+    this.search  = Object.freeze(new Search(privateProps.get(this)));
+    this.flights = Object.freeze(new Flights(privateProps.get(this)));
   }
 
   set apiKey(key) {
