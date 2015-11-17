@@ -25,7 +25,8 @@
     "gulp-babel": "^6.1.0",
     "gulp-concat": "^2.6.0",
     "gulp-sourcemaps": "^1.6.0",
-    "mocha": "^2.3.4"
+    "mocha": "^2.3.4",
+    "underscore": "^1.8.3"
   },
   "dependencies": {
     "path-to-regexp": "^1.2.1",
