@@ -39,22 +39,47 @@ describe('Search', function() {
     });
 
     describe('when there are missing required params', function() {
-      var req = raf.search.query({ flights: [
-        { from: 'SFO', departure: new Date() }
-      ]}); 
+      var tests = [
+        {
+          params: {
+            flights: [
+              { from: 'SFO', to: 'FCO' }
+            ]
+          },
+          missing: 'passengers'
+        },
+        {
+          params: {
+            flights: [
+              { from: 'SFO', passengers: ['ADT'] }
+            ]
+          },
+          missing: 'to'
+        },
+        {
+          params: {
+            flights: [
+              { to: 'SFO', passengers: ['ADT'] }
+            ]
+          },
+          missing: 'from'
+        }
+      ];
 
-      it('should return a 400 error', function() {
-        return req.should.be.rejectedWith(/400/);
-      });
+      tests.forEach(function(test) {
+        var req = raf.search.query(test.params); 
 
-      it('should return a meaningful error message', function() {
-        return req.should.be.rejected.then(function(message) {
-          return Q.all([
-            message.should.have.deep.property('content.error'),
-            message.content.message['obj.flights[0].passengers'][0].msg[0].should.equal('error.path.missing'),
-            message.content.message['obj.flights[0].to'][0].msg[0].should.equal('error.path.missing')
+        it('should return a 400 error', function() {
+          return req.should.be.rejectedWith(/400/);
+        });
 
-          ]);
+        it('should complain that "' + test.missing + '" is missing', function() {
+          return req.should.be.rejected.then(function(message) {
+            return Q.all([
+              message.should.have.deep.property('content.error'),
+              message.content.message['obj.flights[0].' + test.missing][0].msg[0].should.equal('error.path.missing')
+            ]);
+          });
         });
       });
     });
@@ -102,7 +127,7 @@ describe('Search', function() {
       it('should not return any flight', function() {
         return req.should.eventually.deep.equal({flights: []});
       });
-    })
+    });
   });
 });
 
