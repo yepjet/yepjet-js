@@ -4,6 +4,7 @@ var util = require('util');
 var raf = require('..')('key');
 var HTTPError = require('../lib/resources/errors').HTTPError;
 var Q = require('q');
+var _ = require('underscore');
 
 describe('Search', function() {
   describe('#query()', function() {
@@ -114,18 +115,33 @@ describe('Search', function() {
       });
     });
 
-    describe('when the destination and the arrival don\'t exists', function() {
-      var req = raf.search.query({ flights: [
+    describe('when the destination or the arrival don\'t exists', function() {
+      var tests = [
         {
           from: 'ZZZ',
-          to: 'XXX',
-          departure: new Date(), 
-          passengers: [{ category: 'ADT' }]
+          to: 'JFK'
+        },
+        {
+          from: 'LHR',
+          to: 'XXX'
+        },
+        {
+          from: 'ZZZ',
+          to: 'XXX'
         }
-      ]}); 
+      ];
 
-      it('should not return any flight', function() {
-        return req.should.eventually.deep.equal({flights: []});
+      tests.forEach(function(test) {
+        var req = raf.search.query({ flights: [
+          _.extend({
+            departure: new Date(), 
+            passengers: [{ category: 'ADT' }]
+          }, test)
+        ]}); 
+
+        it('should not return any flight', function() {
+          return req.should.eventually.deep.equal({flights: []});
+        });
       });
     });
   });
