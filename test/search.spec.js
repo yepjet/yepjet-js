@@ -2,8 +2,7 @@
 
 var util = require('util');
 var raf = require('..')('key');
-var errors = require('../lib/resources/errors');
-var HTTPError = errors.HTTPError;
+var HTTPError = require('../lib/resources/errors').HTTPError;
 var Q = require('q');
 
 describe('Search', function() {
