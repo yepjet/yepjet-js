@@ -101,12 +101,6 @@ describe('Search', function() {
       ]}); 
 
       it('should not return any flight', function() {
-        return req.should.be.fulfilled.then(function(results) {
-          console.log(util.inspect(results, false, null));
-        });
-      });
-
-      it('should not return any flight', function() {
         return req.should.eventually.deep.equal({flights: []});
       });
     })
