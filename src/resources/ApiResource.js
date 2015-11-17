@@ -16,7 +16,8 @@ class APIResource {
   }
 
   get baseUrl() {
-    return privateProps.get(this).conf.host + privateProps.get(this).conf.version;
+    const conf = privateProps.get(this).conf;
+    return conf.host + conf.version;
   }
 
   request(args) {
