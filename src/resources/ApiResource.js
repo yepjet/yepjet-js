@@ -23,7 +23,7 @@ class APIResource {
     args.method = args.method || 'GET';
     args.path   = args.path || '';
     let uncompiledPath = path.join(this.name, args.path);
-    let uri = ptr.compile(uncompiledPath)(args.params);
+    let uri = ptr.compile(uncompiledPath)(args.params || {});
     let requestOptions = {
       method: args.method,
       baseUrl: this.baseUrl, 
