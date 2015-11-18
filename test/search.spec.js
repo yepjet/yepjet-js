@@ -5,6 +5,7 @@ var raf = require('..')('key');
 var HTTPError = require('../lib/resources/errors').HTTPError;
 var Q = require('q');
 var _ = require('underscore');
+var moment = require('moment');
 
 describe('Search', function() {
   describe('#query()', function() {
@@ -141,6 +142,73 @@ describe('Search', function() {
 
         it('should not return any flight', function() {
           return req.should.eventually.deep.equal({flights: []});
+        });
+      });
+    });
+
+    describe('when the origin and the destination exist', function() {
+      var tests = [
+        [
+          {
+            from: 'MXP',
+            to: 'FCO',
+            departure: moment().toDate(),
+            passengers: [{ category: 'ADT' }]
+          },
+          {
+            from: 'FCO',
+            to: 'MXP',
+            departure: moment().add(2, 'days').toDate(),
+            passengers: [{ category: 'ADT' }, { category: 'BUD' }]
+          }
+        ],
+        [
+          {
+            from: 'SFO',
+            to: 'PMO',
+            departure: moment().toDate(),
+            passengers: [{ category: 'C07' }, { category: 'C07' }] // note, these two guys are children alone
+          },
+          {
+            from: 'PMO',
+            to: 'FCO',
+            departure: moment().add(2, 'days').toDate(),
+            passengers: [{ category: 'ADT' }, { category: 'C07' }] 
+          },
+          {
+            from: 'FCO',
+            to: 'SFO',
+            departure: moment().add(6, 'days').toDate(),
+            passengers: [{ category: 'ADT' }]
+          }
+        ],
+        [
+          {
+            from: 'LMP',
+            to: 'NRT',
+            departure: moment().toDate(),
+            passengers: [{ category: 'ADT' }]
+          },
+          {
+            from: 'NRT',
+            to: 'SFO',
+            departure: moment().add(2, 'days').toDate(),
+            passengers: [{ category: 'ADT' }]
+          },
+          {
+            from: 'SFO',
+            to: 'JFK',
+            departure: moment().toDate(), // i'm evil
+            passengers: [{ category: 'ADT' }]
+          }
+        ]
+      ];
+
+      tests.forEach(function(test) {
+        var req = raf.search.query({ flights: test }); 
+
+        it('should work', function() {
+          return req.should.be.fulfilled;
         });
       });
     });
