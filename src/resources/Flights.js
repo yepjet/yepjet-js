@@ -10,6 +10,7 @@ class Flights extends ApiResource {
   fetch(flightId) {
     return this.request({
       method: 'GET',
+      path: ':id',
       params: {
         id: flightId
       }

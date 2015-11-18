@@ -116,7 +116,7 @@ describe('Search', function() {
       });
     });
 
-    describe('when the destination or the arrival don\'t exists', function() {
+    describe('when the destination or the arrival doesn\'t exist', function() {
       var tests = [
         {
           from: 'ZZZ',
