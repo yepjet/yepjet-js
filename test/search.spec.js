@@ -13,12 +13,12 @@ describe('Search', function() {
       var req = raf.search.query(); 
 
       it('should return a 400 error', function() {
-        return req.should.be.rejectedWith(/400/);
+        return req.should.be.rejectedWith(/415/);
       });
 
       it('should return a meaningful error message', function() {
         return req.should.be.rejected.then(function(message) {
-          return message.should.include.keys('content');
+          return message.content.should.include.keys('error');
         });
       });
     });
