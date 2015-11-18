@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/ricogallo/routeandfares-js.git"
+    "url": "git+ssh://git@github.com/ricogallo/routeandfares-node.git"
   },
-  "author": "Riccardo Gueli Alletti",
+  "author": "Riccardo Gueli Alletti <riccardo@routesandfares.com>",
   "license": "BSD-3-Clause",
   "bugs": {
-    "url": "https://github.com/ricogallo/routeandfares-js/issues"
+    "url": "https://github.com/ricogallo/routeandfares-node/issues"
   },
-  "homepage": "https://github.com/ricogallo/routeandfares-js#readme",
+  "homepage": "https://github.com/ricogallo/routeandfares-node#readme",
   "devDependencies": {
     "babel-preset-es2015": "^6.1.18",
     "chai": "^3.4.1",
