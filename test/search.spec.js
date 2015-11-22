@@ -102,7 +102,6 @@ describe('Search', function() {
       var req;
 
       before(function() {
-        console.log('adsadasdsadasas');
         req = raf.search.query({ flights: [
           {
             from: 'JFK',
@@ -129,6 +128,31 @@ describe('Search', function() {
             message.content.message['obj.flights[0].sort_by'][0].msg[0].should.equal('error.expected.date.isoformat'),
             message.content.message['obj.flights[0].passengers[0].category'][0].msg[0].should.equal('error.path.missing'),
           ]);
+        });
+      });
+    });
+
+    describe('when the departure date is before the current date', function() {
+      var req;
+
+      before(function() {
+        req = raf.search.query({flights: [
+          {
+            from: 'LHR',
+            to: 'CDG',
+            departure: moment().subtract(2, 'days').toDate(),
+            passengers: [{ category: 'ADT' }]
+          }
+        ]});
+      });
+
+      it('should return a 400 error', function() {
+        return req.should.be.rejectedWith(/400/);
+      });
+
+      it('should return a meaningful error message', function() {
+        return req.should.be.rejected.then(function(message) {
+          return message.should.have.deep.property('content.error');
         });
       });
     });
