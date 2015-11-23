@@ -123,9 +123,9 @@ describe('Search', function() {
           // console.log(util.inspect(message, false, null));
           return Q.all([
             message.should.have.deep.property('content.error'),
-            message.content.message['obj.flights[0].departure'][0].msg[0].should.equal('error.expected.jsdate'),
+            message.content.message['obj.flights[0].departure'][0].msg[0].should.equal('error.expected.date.isoformat'),
             message.content.message['obj.flights[0].flex'][0].msg[0].should.equal('error.expected.jsboolean'),
-            message.content.message['obj.flights[0].sort_by'][0].msg[0].should.equal('error.expected.date.isoformat'),
+            message.content.message['obj.flights[0].sort_by'][0].msg[0].should.equal('error.expected.jsstring'),
             message.content.message['obj.flights[0].passengers[0].category'][0].msg[0].should.equal('error.path.missing'),
           ]);
         });
