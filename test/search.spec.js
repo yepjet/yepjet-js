@@ -192,7 +192,7 @@ describe('Search', function() {
       });
     });
 
-    describe.only('when the origin and the destination exist', function() {
+    describe('when the origin and the destination exist', function() {
       var tests = [
         [
           {
