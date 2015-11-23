@@ -8,10 +8,10 @@ class NetworkError extends Error {
 }
 
 class HTTPError extends Error {
-  constructor(message = 'Something wrong with the HTTP request', content) {
+  constructor(message = 'Something wrong with the HTTP request', body) {
     super(message);
     this.name = 'HTTPError';
-    this.content = content;
+    this.body = body;
   }
 }
 

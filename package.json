@@ -5,7 +5,7 @@
   "main": "lib/routesandfares.js",
   "private": true,
   "scripts": {
-    "test": "./node_modules/.bin/mocha --require test/support/required-libs --timeout 30000"
+    "test": "./node_modules/.bin/gulp && ./node_modules/.bin/mocha"
   },
   "repository": {
     "type": "git",

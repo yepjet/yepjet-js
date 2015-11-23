@@ -6,6 +6,7 @@ var HTTPError = require('../lib/resources/errors').HTTPError;
 var Q = require('q');
 var _ = require('underscore');
 var moment = require('moment');
+var logJSON = require('./support/log-json.js');
 
 describe('Search', function() {
   describe('#query()', function() {
@@ -76,13 +77,13 @@ describe('Search', function() {
         }
       ];
 
-      var req;
-
-      before(function() {
-        req = raf.search.query(test.params); 
-      });
-
       tests.forEach(function(test) {
+        var req;
+
+        before(function() {
+          req = raf.search.query(test.params); 
+        });
+
         it('should return a 400 error', function() {
           return req.should.be.rejectedWith(/400/);
         });
@@ -123,9 +124,9 @@ describe('Search', function() {
           // console.log(util.inspect(message, false, null));
           return Q.all([
             message.should.have.deep.property('content.error'),
-            message.content.message['obj.flights[0].departure'][0].msg[0].should.equal('error.expected.jsdate'),
+            message.content.message['obj.flights[0].departure'][0].msg[0].should.equal('error.expected.date.isoformat'),
             message.content.message['obj.flights[0].flex'][0].msg[0].should.equal('error.expected.jsboolean'),
-            message.content.message['obj.flights[0].sort_by'][0].msg[0].should.equal('error.expected.date.isoformat'),
+            message.content.message['obj.flights[0].sort_by'][0].msg[0].should.equal('error.expected.jsstring'),
             message.content.message['obj.flights[0].passengers[0].category'][0].msg[0].should.equal('error.path.missing'),
           ]);
         });
@@ -191,7 +192,7 @@ describe('Search', function() {
       });
     });
 
-    describe('when the origin and the destination exist', function() {
+    describe.only('when the origin and the destination exist', function() {
       var tests = [
         [
           {
