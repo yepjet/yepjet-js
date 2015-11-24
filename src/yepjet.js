@@ -6,7 +6,7 @@ import Flights    from './resources/Flights';
 
 const privateProps = new WeakMap();
 
-class RaF {
+class YepJet {
   constructor(key = null, host = 'http://localhost:9000/', apiVersion = 'v1') {
     privateProps.set(this, { apiKey: key, host: host, version: apiVersion }); 
     this.search  = Object.freeze(new Search(privateProps.get(this)));
@@ -18,10 +18,10 @@ class RaF {
   }
 }
 
-Object.defineProperty(RaF, 'PACKAGE_VERSION', {
+Object.defineProperty(YepJet, 'PACKAGE_VERSION', {
   value: version
 });
 
 module.exports = exports = function(key, host, apiVersion) {
-  return Object.freeze(new RaF(key, host, apiVersion));
+  return Object.freeze(new YepJet(key, host, apiVersion));
 }

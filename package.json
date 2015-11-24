@@ -1,22 +1,22 @@
 {
-  "name": "routesandfares",
+  "name": "yepjet",
   "version": "0.0.1",
-  "description": "javascript bindings to routes & fares",
-  "main": "lib/routesandfares.js",
+  "description": "javascript bindings to yepjet",
+  "main": "lib/yepjet.js",
   "private": true,
   "scripts": {
     "test": "./node_modules/.bin/gulp && ./node_modules/.bin/mocha"
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/ricogallo/routeandfares-node.git"
+    "url": "git+ssh://git@github.com/ricogallo/yetpjet-node.git"
   },
-  "author": "Riccardo Gueli Alletti <riccardo@routesandfares.com>",
+  "author": "Riccardo Gueli Alletti <riccardo@yetpjet.com>",
   "license": "BSD-3-Clause",
   "bugs": {
-    "url": "https://github.com/ricogallo/routeandfares-node/issues"
+    "url": "https://github.com/ricogallo/yetpjet-node/issues"
   },
-  "homepage": "https://github.com/ricogallo/routeandfares-node#readme",
+  "homepage": "https://github.com/ricogallo/yetpjet-node#readme",
   "devDependencies": {
     "babel-preset-es2015": "^6.1.18",
     "chai": "^3.4.1",
