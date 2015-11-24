@@ -1,12 +1,12 @@
 'use strict';
 
 var util = require('util');
-var raf = require('..')('key');
-var HTTPError = require('../lib/resources/errors').HTTPError;
+var raf = require('../..')('key');
+var HTTPError = require('../../lib/resources/errors').HTTPError;
 var Q = require('q');
 var _ = require('underscore');
 var moment = require('moment');
-var logJSON = require('./support/log-json.js');
+var logJSON = require('../support/log-json.js');
 
 describe('Search', function() {
   describe('#query()', function() {
