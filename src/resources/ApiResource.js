@@ -8,7 +8,7 @@ import {NetworkError, HTTPError} from './errors';
 
 const privateProps = new WeakMap();
 
-class APIResource {
+class ApiResource {
   constructor(conf, name) {
     privateProps.set(this, { conf: conf });
     this.name = name;
