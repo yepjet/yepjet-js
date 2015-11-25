@@ -9,6 +9,15 @@ var version     = 'v1';
 var name        = 'stuff';
 var URL_REGEXP  = /^[A-Za-z][A-Za-z\d.+-]*:\/*(?:\w+(?::\w+)?@)?[^\s/]+(?::\d+)?(?:\/[\w#!:.?+=&%@\-/]*)?$/;
 
+function curry(fn) {
+  var args = Array.prototype.slice.call(arguments, 1);
+  return function() {
+    return fn.apply(this, args.concat(
+      Array.prototype.slice.call(arguments, 0)
+    ));
+  };
+}
+
 describe('ApiResource', function() {
   var resource;
 
@@ -34,11 +43,23 @@ describe('ApiResource', function() {
       resource.request().should.respondTo('then');
     });
 
+    describe('when the params are wrong', function() {
+      it('should throw a WrongParamsError', function() {
+        curry(resource.request.bind(resource), {
+          path: ':id',
+          params: { wrong: 'param' }
+        }).should.deep.throw(Error);
+      });
+    });
+
     describe('a GET request', function() {
       it('should call the right endpoint with query string data', function() {
 
         var promise = resource.request({
-          path: 'path',
+          path: ':id',
+          params: {
+            id: 1
+          },
           data: {
             foo: 'bar'
           }
@@ -47,7 +68,7 @@ describe('ApiResource', function() {
         request.should.be.calledWith({
           baseUrl: resource.baseUrl,
           method: 'GET',
-          uri: 'stuff/path',
+          uri: 'stuff/1',
           qs: { foo: 'bar' }
         });
 
@@ -60,7 +81,6 @@ describe('ApiResource', function() {
         it('should call the right endpoint with ' + method + ' and json data', function() {
           var promise = resource.request({
             method: method,
-            path: 'path',
             data: {
               foo: 'bar'
             }
@@ -69,7 +89,7 @@ describe('ApiResource', function() {
           request.should.be.calledWith({
             baseUrl: resource.baseUrl,
             method: method,
-            uri: 'stuff/path',
+            uri: 'stuff',
             json: true,
             body: { foo: 'bar' }
           });
