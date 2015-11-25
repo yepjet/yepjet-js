@@ -5,7 +5,7 @@ import url      from 'url';
 import ptr      from 'path-to-regexp';
 import Q        from 'q';
 import request  from 'request';
-import {NetworkError, HTTPError} from './errors';
+import {WrongParamsError, NetworkError, HTTPError} from './errors';
 
 const privateProps = new WeakMap();
 
@@ -28,7 +28,14 @@ class ApiResource {
     args.method = args.method || 'GET';
     args.path   = args.path || '';
     let uncompiledPath = path.join(this.name, args.path);
-    let uri = ptr.compile(uncompiledPath)(args.params || {});
+    let uri;
+
+    try {
+      uri = ptr.compile(uncompiledPath)(args.params);
+    } catch(e) {
+      throw new WrongParamsError(e.message);
+    }
+
     let requestOptions = {
       method: args.method,
       baseUrl: this.baseUrl, 

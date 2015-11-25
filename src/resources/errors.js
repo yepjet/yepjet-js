@@ -1,5 +1,12 @@
 'use strict';
 
+class WrongParamsError extends Error {
+  constructor(message = '') {
+    super('The params are not matching the path: ' + message);
+    this.name = 'WrongParamsError';
+  }
+}
+
 class NetworkError extends Error {
   constructor(message = 'Something wrong with the network') {
     super(message);
@@ -15,4 +22,4 @@ class HTTPError extends Error {
   }
 }
 
-export {NetworkError, HTTPError};
+export {WrongParamsError, NetworkError, HTTPError};
