@@ -48,7 +48,7 @@ describe('ApiResource', function() {
         curry(resource.request.bind(resource), {
           path: ':id',
           params: { wrong: 'param' }
-        }).should.deep.throw(Error);
+        }).should.throw(Error);
       });
     });
 

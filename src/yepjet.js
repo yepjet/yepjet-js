@@ -18,10 +18,12 @@ class YepJet {
   }
 }
 
-Object.defineProperty(YepJet, 'PACKAGE_VERSION', {
-  value: version
-});
-
 module.exports = exports = function(key, host, apiVersion) {
-  return Object.freeze(new YepJet(key, host, apiVersion));
+  var client = new YepJet(key, host, apiVersion);
+
+  Object.defineProperty(client, 'PACKAGE_VERSION', {
+    value: version
+  });
+
+  return Object.freeze(client);
 }
