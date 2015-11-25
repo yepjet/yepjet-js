@@ -1,7 +1,7 @@
 'use strict';
 
 var util = require('util');
-var raf = require('../..')('key');
+var yepjet = require('../..')('key');
 var HTTPError = require('../../lib/resources/errors').HTTPError;
 var Q = require('q');
 var _ = require('underscore');
@@ -14,7 +14,7 @@ describe('Search', function() {
       var req;
 
       before(function() {
-        req = raf.search.query(); 
+        req = yepjet.search.query(); 
       });
 
       it('should return a 400 error', function() {
@@ -32,7 +32,7 @@ describe('Search', function() {
       var req;
 
       before(function() {
-        req = raf.search.query({ foo: 'bar' }); 
+        req = yepjet.search.query({ foo: 'bar' }); 
       });
 
       it('should return a 400 error', function() {
@@ -81,7 +81,7 @@ describe('Search', function() {
         var req;
 
         before(function() {
-          req = raf.search.query(test.params); 
+          req = yepjet.search.query(test.params); 
         });
 
         it('should return a 400 error', function() {
@@ -103,7 +103,7 @@ describe('Search', function() {
       var req;
 
       before(function() {
-        req = raf.search.query({ flights: [
+        req = yepjet.search.query({ flights: [
           {
             from: 'JFK',
             to: 'LHR',
@@ -137,7 +137,7 @@ describe('Search', function() {
       var req;
 
       before(function() {
-        req = raf.search.query({flights: [
+        req = yepjet.search.query({flights: [
           {
             from: 'LHR',
             to: 'CDG',
@@ -178,7 +178,7 @@ describe('Search', function() {
         var req;
 
         before(function() {
-          req = raf.search.query({ flights: [
+          req = yepjet.search.query({ flights: [
             _.extend({
               departure: moment().add(1, 'days').toDate(), 
               passengers: [{ category: 'ADT' }]
@@ -254,7 +254,7 @@ describe('Search', function() {
         var req;
 
         before(function() {
-          req = raf.search.query({ flights: test }); 
+          req = yepjet.search.query({ flights: test }); 
         });
 
         it('should work', function() {

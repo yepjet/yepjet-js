@@ -1,3 +1,2 @@
 --require test/support/required-libs
 --timeout 30000
---recursive

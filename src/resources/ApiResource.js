@@ -1,6 +1,7 @@
 'use strict';
 
 import path     from 'path';
+import url      from 'url';
 import ptr      from 'path-to-regexp';
 import Q        from 'q';
 import request  from 'request';
@@ -16,10 +17,14 @@ class ApiResource {
 
   get baseUrl() {
     const conf = privateProps.get(this).conf;
-    return conf.host + conf.version;
+    return url.format({
+      protocol: 'https',
+      host: conf.host,
+      pathname: conf.version
+    });
   }
 
-  request(args) {
+  request(args = {}) {
     args.method = args.method || 'GET';
     args.path   = args.path || '';
     let uncompiledPath = path.join(this.name, args.path);
@@ -49,6 +54,9 @@ class ApiResource {
       } else if (!/^2\d\d$/.test(response.statusCode)) {
         deferred.reject(new HTTPError(response.statusCode, body));
       } else {
+        try {
+          body = JSON.parse(body);
+        } catch(e) {}
         deferred.resolve(body);
       }
     });
@@ -57,4 +65,4 @@ class ApiResource {
   }
 }
 
-export default APIResource;
+export default ApiResource;
