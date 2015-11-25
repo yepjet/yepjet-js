@@ -27,7 +27,9 @@
     "gulp-sourcemaps": "^1.6.0",
     "mocha": "^2.3.4",
     "moment": "^2.10.6",
-    "underscore": "^1.8.3"
+    "underscore": "^1.8.3",
+    "sinon": "^1.17.2",
+    "sinon-chai": "^2.8.0"
   },
   "dependencies": {
     "path-to-regexp": "^1.2.1",
