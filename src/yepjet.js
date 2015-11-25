@@ -7,7 +7,7 @@ import Flights    from './resources/Flights';
 const privateProps = new WeakMap();
 
 class YepJet {
-  constructor(key = null, host = 'http://localhost:9000/', apiVersion = 'v1') {
+  constructor(key = null, host = 'localhost:9000', apiVersion = 'v1') {
     privateProps.set(this, { apiKey: key, host: host, version: apiVersion }); 
     this.search  = Object.freeze(new Search(privateProps.get(this)));
     this.flights = Object.freeze(new Flights(privateProps.get(this)));

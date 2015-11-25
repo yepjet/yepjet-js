@@ -18,7 +18,7 @@ class ApiResource {
   get baseUrl() {
     const conf = privateProps.get(this).conf;
     return url.format({
-      protocol: 'https',
+      protocol: 'http',
       host: conf.host,
       pathname: conf.version
     });

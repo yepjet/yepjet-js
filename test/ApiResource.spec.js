@@ -1,7 +1,7 @@
 'use strict';
 
 var sinon       = require('sinon');
-var proxyquire  = require('proxyquire');
+var proxyquire  = require('proxyquire').noPreserveCache();
 var request     = sinon.stub().yields(null, { statusCode: 200 }, JSON.stringify({ success: true }));
 var ApiResource = proxyquire('../lib/resources/ApiResource.js', { request: request }).default;
 var host        = 'www.example.com';
