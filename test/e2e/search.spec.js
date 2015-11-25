@@ -18,12 +18,12 @@ describe('Search', function() {
       });
 
       it('should return a 400 error', function() {
-        return req.should.be.rejectedWith(/415/);
+        return req.should.be.rejectedWith(/400/);
       });
 
       it('should return a meaningful error message', function() {
         return req.should.be.rejected.then(function(message) {
-          return message.content.should.include.keys('error');
+          return message.body.should.include.keys('error');
         });
       });
     });
@@ -42,8 +42,8 @@ describe('Search', function() {
       it('should return a meaningful error message', function() {
         return req.should.be.rejected.then(function(message) {
           return Q.all([
-            message.should.have.deep.property('content.error'),
-            message.content.message['obj.flights'][0].msg[0].should.equal('error.path.missing')
+            message.should.have.deep.property('body.error'),
+            message.body.message['obj.flights'][0].msg[0].should.equal('error.path.missing')
           ]);
         });
       });
@@ -91,8 +91,8 @@ describe('Search', function() {
         it('should complain that "' + test.missing + '" is missing', function() {
           return req.should.be.rejected.then(function(message) {
             return Q.all([
-              message.should.have.deep.property('content.error'),
-              message.content.message['obj.flights[0].' + test.missing][0].msg[0].should.equal('error.path.missing')
+              message.should.have.deep.property('body.error'),
+              message.body.message['obj.flights[0].' + test.missing][0].msg[0].should.equal('error.path.missing')
             ]);
           });
         });
@@ -123,11 +123,11 @@ describe('Search', function() {
         return req.should.be.rejected.then(function(message) {
           // console.log(util.inspect(message, false, null));
           return Q.all([
-            message.should.have.deep.property('content.error'),
-            message.content.message['obj.flights[0].departure'][0].msg[0].should.equal('error.expected.date.isoformat'),
-            message.content.message['obj.flights[0].flex'][0].msg[0].should.equal('error.expected.jsboolean'),
-            message.content.message['obj.flights[0].sort_by'][0].msg[0].should.equal('error.expected.jsstring'),
-            message.content.message['obj.flights[0].passengers[0].category'][0].msg[0].should.equal('error.path.missing'),
+            message.should.have.deep.property('body.error'),
+            message.body.message['obj.flights[0].departure'][0].msg[0].should.equal('error.expected.date.isoformat'),
+            // message.body.message['obj.flights[0].flex'][0].msg[0].should.equal('error.expected.jsboolean'),
+            // message.body.message['obj.flights[0].sort_by'][0].msg[0].should.equal('error.expected.jsstring'),
+            message.body.message['obj.flights[0].passengers[0].category'][0].msg[0].should.equal('error.path.missing'),
           ]);
         });
       });
@@ -153,7 +153,7 @@ describe('Search', function() {
 
       it('should return a meaningful error message', function() {
         return req.should.be.rejected.then(function(message) {
-          return message.should.have.deep.property('content.error');
+          return message.should.have.deep.property('body.error');
         });
       });
     });

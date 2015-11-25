@@ -30,7 +30,7 @@ describe('ApiResource', function() {
 
   describe('baseUrl', function() {
     it('returns the resource base url', function() {
-      resource.baseUrl.should.equal('https://' + host + '/' + version);
+      resource.baseUrl.should.equal('http://' + host + '/' + version);
     });
 
     it('returns a valid URL', function() {
@@ -90,8 +90,8 @@ describe('ApiResource', function() {
             baseUrl: resource.baseUrl,
             method: method,
             uri: 'stuff',
-            json: true,
-            body: { foo: 'bar' }
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ foo: 'bar' })
           });
 
           return promise.should.be.eventually.deep.equal({ success: true });
