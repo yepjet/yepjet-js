@@ -260,7 +260,7 @@ describe('Search', function() {
         it('should work', function() {
           return req.should.be.fulfilled.then(function(res) {
             if (index === 2) {
-              return res.flights.should.have.length(3);
+              return res.flights.should.be.empty;
             }
           });
         });

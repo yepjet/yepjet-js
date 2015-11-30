@@ -39,20 +39,23 @@ class ApiResource {
     let requestOptions = {
       method: args.method,
       baseUrl: this.baseUrl, 
+
+      headers: {
+        'Content-Type': 'application/json'
+      },
       uri: uri
     };
-
-    let deferred = Q.defer();
 
     switch(args.method) {
       case 'POST':
       case 'PUT':
-        if (args.data) requestOptions.body = JSON.stringify(args.data);
-        requestOptions.headers = { 'Content-Type': 'application/json' };
+        requestOptions.body = JSON.stringify(args.data || {});
         break;
       case 'GET':
-        if (args.data) requestOptions.qs = args.data;
+        requestOptions.qs = args.data;
     }
+
+    let deferred = Q.defer();
 
     request(requestOptions, function(err, response, body) {
       try {

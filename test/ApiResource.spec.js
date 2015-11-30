@@ -69,6 +69,9 @@ describe('ApiResource', function() {
           baseUrl: resource.baseUrl,
           method: 'GET',
           uri: 'stuff/1',
+          headers: {
+            'Content-Type': 'application/json'
+          },
           qs: { foo: 'bar' }
         });
 
@@ -90,7 +93,9 @@ describe('ApiResource', function() {
             baseUrl: resource.baseUrl,
             method: method,
             uri: 'stuff',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+              'Content-Type': 'application/json'
+            },
             body: JSON.stringify({ foo: 'bar' })
           });
 

@@ -3,6 +3,7 @@
 import {version}  from '../package.json';
 import Search     from './resources/Search';
 import Flights    from './resources/Flights';
+import Orders     from './resources/Orders';
 
 const privateProps = new WeakMap();
 
@@ -11,6 +12,7 @@ class YepJet {
     privateProps.set(this, { apiKey: key, host: host, version: apiVersion }); 
     this.search  = Object.freeze(new Search(privateProps.get(this)));
     this.flights = Object.freeze(new Flights(privateProps.get(this)));
+    this.orders  = Object.freeze(new Orders(privateProps.get(this)));
   }
 
   set apiKey(key) {
