@@ -183,7 +183,9 @@ describe('Search', function() {
               departure: moment().add(1, 'days').toDate(), 
               passengers: [{ category: 'ADT' }]
             }, test)
-          ]}); 
+          ]}).then(null, function(err) {
+            console.warn(err);
+          }); 
         });
 
         it('should not return any flight', function() {
@@ -262,6 +264,14 @@ describe('Search', function() {
             if (index === 2) {
               return res.flights.should.be.empty;
             }
+
+            // return Q.all(res.flights.map(function(solution) {
+            //   if (solution.length == 6) {
+
+            //   console.log(solution);
+            //   }
+            //   return solution.should.have.length(test.length);
+            // }));
           });
         });
       });

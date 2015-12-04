@@ -22,11 +22,29 @@ describe('Orders', function() {
   });
 
   describe('#create()', function() {
-    it('should invoke #request() with create params', function() {
-      var stub = sinon.stub(orders, 'request');
-      orders.create();
-      stub.should.have.been.calledWith({
-        method: 'POST'
+    describe('when invoked without params', function() {
+      it('should invoke #request() with create params', function() {
+        var stub = sinon.stub(orders, 'request');
+        orders.create();
+        stub.should.have.been.calledWith({
+          method: 'POST'
+        });
+      });
+    });
+
+    describe('when invoked with an array of flights params', function() {
+      it('should invoke #request() with create params', function() {
+        var stub = sinon.stub(orders, 'request');
+        orders.create(['flightId', { id: 'anotherId' }]);
+        stub.should.have.been.calledWith({
+          method: 'POST',
+          data: {
+            flights: [
+              { id: 'flightId' },
+              { id: 'anotherId' }
+            ]
+          }
+        });
       });
     });
   });
@@ -36,7 +54,7 @@ describe('Orders', function() {
       var stub = sinon.stub(orders, 'request');
       orders.addFlight('oid', 'fid');
       stub.should.have.been.calledWith({
-        method: 'POST',
+        method: 'PUT',
         path: ':orderId/flights/:flightId',
         params: {
           orderId: 'oid',
