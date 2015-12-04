@@ -78,7 +78,7 @@ describe.only('Bookings', function() {
             message.body.message['obj.traveler.address'][0].msg[0].should.equal('error.path.missing'),
             message.body.message['obj.traveler.first_name'][0].msg[0].should.equal('error.path.missing'),
             message.body.message['obj.traveler.last_name'][0].msg[0].should.equal('error.path.missing'),
-            message.body.message['obj.traveler.delivery_info'][0].msg[0].should.equal('error.path.missing'),
+            // message.body.message['obj.traveler.delivery_info'][0].msg[0].should.equal('error.path.missing'),
             message.body.message['obj.traveler.birth_date'][0].msg[0].should.equal('error.path.missing'),
             message.body.message['obj.traveler.gender'][0].msg[0].should.equal('error.path.missing'),
             message.body.message['obj.traveler.email'][0].msg[0].should.equal('error.path.missing'),
