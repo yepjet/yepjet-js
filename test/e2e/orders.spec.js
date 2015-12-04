@@ -18,14 +18,13 @@ describe('Orders', function() {
         {
           from: 'MAD',
           to: 'FCO',
-          departure: moment().add(30, 'days').toDate(),
-          passengers: [{ category: 'ADT' }]
+          departure: moment().add(30, 'days').toDate()
         }
-      ]}).then(function(res) {
-        flightId = res.flights[0][0].id;
-      }, function(err) {
-        console.warn(err)
-      });
+      ],
+      passengers: [{ category: 'ADT' }]
+    }).then(function(res) {
+      flightId = res.flights[0][0].id;
+    });
   });
 
   describe('#create()', function() {

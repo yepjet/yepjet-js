@@ -8,7 +8,7 @@ var logJSON   = require('../support/log-json.js');
 var inspect   = require('util').inspect;
 var fs        = require('fs');
 
-describe.only('Bookings', function() {
+describe('Bookings', function() {
   var orderId;
   var flightId;
 
@@ -18,10 +18,11 @@ describe.only('Bookings', function() {
         {
           from: 'MAD',
           to: 'FCO',
-          departure: moment().add(30, 'days').toDate(),
-          passengers: [{ category: 'ADT' }]
+          departure: moment().add(30, 'days').toDate()
         }
-      ]}).then(function(res) {
+      ],
+      passengers: [{ category: 'ADT' }]
+    }).then(function(res) {
         flightId = res.flights[0][0].id;
         return yepjet.orders.create([flightId]);
       }).then(function(res) {
@@ -133,13 +134,11 @@ describe.only('Bookings', function() {
 
         before(function() {
           bookingData.order_id = 'fakeOrderId';
-          req = yepjet.bookings.create(bookingData).then(null, function(err) {
-            logJSON(err);
-          });
+          req = yepjet.bookings.create(bookingData);
         });
 
-        it('should return a 400 error', function() {
-          return req.should.be.rejectedWith(/400/);
+        it('should return a 404 error', function() {
+          return req.should.be.rejectedWith(/404/);
         });
       });
 

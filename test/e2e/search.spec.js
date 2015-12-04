@@ -43,7 +43,8 @@ describe('Search', function() {
         return req.should.be.rejected.then(function(message) {
           return Q.all([
             message.should.have.deep.property('body.error'),
-            message.body.message['obj.flights'][0].msg[0].should.equal('error.path.missing')
+            message.body.message['obj.flights'][0].msg[0].should.equal('error.path.missing'),
+            message.body.message['obj.passengers'][0].msg[0].should.equal('error.path.missing')
           ]);
         });
       });
@@ -62,16 +63,18 @@ describe('Search', function() {
         {
           params: {
             flights: [
-              { from: 'SFO', passengers: ['ADT'] }
-            ]
+              { from: 'SFO' }
+            ],
+            passengers: ['ADT'] 
           },
           missing: 'to'
         },
         {
           params: {
             flights: [
-              { to: 'SFO', passengers: ['ADT'] }
-            ]
+              { to: 'SFO' }
+            ],
+            passengers: ['ADT'] 
           },
           missing: 'from'
         }
@@ -92,7 +95,9 @@ describe('Search', function() {
           return req.should.be.rejected.then(function(message) {
             return Q.all([
               message.should.have.deep.property('body.error'),
-              message.body.message['obj.flights[0].' + test.missing][0].msg[0].should.equal('error.path.missing')
+              test.missing !== 'passengers' ?
+              message.body.message['obj.flights[0].' + test.missing][0].msg[0].should.equal('error.path.missing') :
+              message.body.message['obj.passengers'][0].msg[0].should.equal('error.path.missing') 
             ]);
           });
         });
@@ -103,16 +108,18 @@ describe('Search', function() {
       var req;
 
       before(function() {
-        req = yepjet.search.query({ flights: [
-          {
-            from: 'JFK',
-            to: 'LHR',
-            departure: 'random_string_wrong_date', 
-            flex: 12,
-            sort_by: false, 
-            passengers: [{ foo: true }, { category: 'BUD' }, { category: 'LOL' }]
-          }
-        ]}); 
+        req = yepjet.search.query({
+          flights: [
+            {
+              from: 'JFK',
+              to: 'LHR',
+              departure: 'random_string_wrong_date', 
+              flex: 12,
+              sort_by: false, 
+            }
+          ],
+          passengers: [{ foo: true }, { category: 'BUD' }, { category: 'LOL' }]
+        }); 
       });
 
       it('should return a 400 error', function() {
@@ -121,13 +128,12 @@ describe('Search', function() {
 
       it('should return a meaningful error message', function() {
         return req.should.be.rejected.then(function(message) {
-          // console.log(util.inspect(message, false, null));
           return Q.all([
             message.should.have.deep.property('body.error'),
             message.body.message['obj.flights[0].departure'][0].msg[0].should.equal('error.expected.date.isoformat'),
             // message.body.message['obj.flights[0].flex'][0].msg[0].should.equal('error.expected.jsboolean'),
             // message.body.message['obj.flights[0].sort_by'][0].msg[0].should.equal('error.expected.jsstring'),
-            message.body.message['obj.flights[0].passengers[0].category'][0].msg[0].should.equal('error.path.missing'),
+            message.body.message['obj.passengers[0].category'][0].msg[0].should.equal('error.path.missing'),
           ]);
         });
       });
@@ -137,14 +143,16 @@ describe('Search', function() {
       var req;
 
       before(function() {
-        req = yepjet.search.query({flights: [
-          {
-            from: 'LHR',
-            to: 'CDG',
-            departure: moment().subtract(2, 'days').toDate(),
-            passengers: [{ category: 'ADT' }]
-          }
-        ]});
+        req = yepjet.search.query({
+          flights: [
+            {
+              from: 'LHR',
+              to: 'CDG',
+              departure: moment().subtract(2, 'days').toDate() 
+            }
+          ],
+          passengers: [{ category: 'ADT' }]
+        });
       });
 
       it('should return a 400 error', function() {
@@ -178,85 +186,92 @@ describe('Search', function() {
         var req;
 
         before(function() {
-          req = yepjet.search.query({ flights: [
-            _.extend({
-              departure: moment().add(1, 'days').toDate(), 
-              passengers: [{ category: 'ADT' }]
-            }, test)
-          ]}).then(null, function(err) {
-            console.warn(err);
-          }); 
+          req = yepjet.search.query({
+            flights: [
+              _.extend({
+                departure: moment().add(1, 'days').toDate()
+
+              }, test)
+            ],
+            passengers: [{ category: 'ADT' }]
+          });
         });
 
         it('should not return any flight', function() {
-          return req.should.eventually.deep.equal({flights: []});
+          return req.should.eventually.deep.equal({
+            flights: [],
+            passengers: []
+          });
         });
       });
     });
 
     describe('when the origin and the destination exist', function() {
       var tests = [
-        [
-          {
-            from: 'MXP',
-            to: 'FCO',
-            departure: moment().add(1, 'days').toDate(),
-            passengers: [{ category: 'ADT' }]
-          },
-          {
-            from: 'FCO',
-            to: 'MXP',
-            departure: moment().add(3, 'days').toDate(),
-            passengers: [{ category: 'ADT' }, { category: 'BUD' }]
-          }
-        ],
-        [
-          {
-            from: 'SFO',
-            to: 'PMO',
-            departure: moment().add(3, 'days').toDate(),
-            passengers: [{ category: 'C07' }, { category: 'C07' }] // note, these two guys are children alone
-          },
-          {
-            from: 'PMO',
-            to: 'FCO',
-            departure: moment().add(6, 'days').toDate(),
-            passengers: [{ category: 'ADT' }, { category: 'C07' }] 
-          },
-          {
-            from: 'FCO',
-            to: 'SFO',
-            departure: moment().add(10, 'days').toDate(),
-            passengers: [{ category: 'ADT' }]
-          }
-        ],
-        [
-          {
-            from: 'LMP',
-            to: 'NRT',
-            departure: moment().add(1, 'days').toDate(),
-            passengers: [{ category: 'ADT' }]
-          },
-          {
-            from: 'NRT',
-            to: 'SFO',
-            departure: moment().add(4, 'days').toDate(),
-            passengers: [{ category: 'ADT' }]
-          },
-          {
-            from: 'SFO',
-            to: 'JFK',
-            departure: moment().add(1, 'day').toDate(), // i'm evil
-            passengers: [{ category: 'ADT' }]
-          }
-        ]
+        {
+          flights: [
+            {
+              from: 'MXP',
+              to: 'FCO',
+              departure: moment().add(1, 'days').toDate()
+            },
+            {
+              from: 'FCO',
+              to: 'MXP',
+              departure: moment().add(3, 'days').toDate()
+            }
+          ],
+          passengers: [{ category: 'ADT' }, { category: 'BUD' }]
+        },
+        {
+          flights: [
+            {
+              from: 'SFO',
+              to: 'PMO',
+              departure: moment().add(3, 'days').toDate()
+            },
+            {
+              from: 'PMO',
+              to: 'FCO',
+              departure: moment().add(6, 'days').toDate()
+            },
+            {
+              from: 'FCO',
+              to: 'SFO',
+              departure: moment().add(10, 'days').toDate()
+            }
+          ],
+          passengers: [{ category: 'C07' }, { category: 'C07' }] // note, these two guys are children alone
+        },
+        {
+          flights: [
+            {
+              from: 'LMP',
+              to: 'NRT',
+              departure: moment().add(1, 'days').toDate(),
+              passengers: [{ category: 'ADT' }]
+            },
+            {
+              from: 'NRT',
+              to: 'SFO',
+              departure: moment().add(4, 'days').toDate(),
+              passengers: [{ category: 'ADT' }]
+            },
+            {
+              from: 'SFO',
+              to: 'JFK',
+              departure: moment().add(1, 'day').toDate(), // i'm evil
+            }
+          ],
+          passengers: [{ category: 'ADT' }]
+        }
       ];
 
       tests.forEach(function(test, index) {
         var req;
 
         before(function() {
-          req = yepjet.search.query({ flights: test }); 
+          req = yepjet.search.query(test); 
         });
 
         it('should work', function() {

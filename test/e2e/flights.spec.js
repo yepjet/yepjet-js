@@ -23,29 +23,30 @@ describe('Flights', function() {
     });
 
     describe('when it has an existing flight id', function() {
-      var flight;
+      var req;
+      var flightId;
 
       before(function() {
-        return yepjet.search.query({
+        req = yepjet.search.query({
           flights: [
             {
               from: 'SFO',
               to: 'JFK',
-              departure: moment().add(1, 'days').toDate(),
-              passengers: [{ category: 'ADT' }]
+              departure: moment().add(1, 'days').toDate()
             }
-          ]
+          ],
+          passengers: [{ category: 'ADT' }]
         }).then(function(res) {
-          flight = res['flights'][0][0];
+          flightId = res['flights'][0][0].id;
+          return yepjet.flights.fetch(flightId);
         });
       });
 
       it('should return the selected flight', function() {
-        return yepjet.flights.fetch(flight.id).should.be.eventually.fulfilled.then(function(res) {
+        return req.should.be.eventually.fulfilled.then(function(res) {
           return Q.all([
-            res.id.should.equal(flight.id),
+            res.id.should.equal(flightId),
             res.price.should.be.defined,
-            res.passenger.should.be.defined,
             res.segments.should.not.be.empty
           ]);
         });
