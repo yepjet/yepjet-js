@@ -2,10 +2,16 @@
 
 Welcome to the JavaScript SDK for YepJet, the simple flight booking API.
 
+## Install
+
+`npm i yepjet`
+
 ## API
 
 The library is structured as to mimic the REST APIs. There are 5 resources currently available. 
-Methods are available under `yepjet.${resource}.${method}`
+Methods are available under `yepjet.${resource}.${method}`. Every method issues an HTTP request and returns a [Promises/A+ specification](http://promises-aplus.github.com/promises-spec/).
+
+The YepJet client is obtained this way `var yepjet = require('yepjet')('apiKey');`. The API key is not necessary so far, since we are in beta and all the endpoints are public, via the `https://sandbox.yepjet.com/v1` url.
 
 ### Search
 
@@ -13,7 +19,7 @@ The entry point to the REST APi. Allow searching of multiple flights and passeng
 
 **Path**: `/search`
 
-**Method:** `#search()`
+**Method:** `yepjet.search(params)`
 
 **Params:**
 ```js
@@ -35,14 +41,7 @@ Provides details about the selected flights.
 
 **Path**: `/flights/:id`
 
-**Method:** `#flights.fetch()`
-
-**Params:**
-```js
-{
-  id: 'xxxx-xxxx-xxxxxxxxx' // FLIGHT IDS
-}
-```
+**Method:** `yepjet.flights.fetch(flightId)`
 
 ### Orders
 
@@ -50,7 +49,7 @@ A cart-like structure which holds the selected flights, ready for purchase.
 
 **Path**: `/orders`
 
-**Method:** `#orders.create()`
+**Method:** `yepjet.orders.create(params)`
 
 **Params:**
 ```js
@@ -59,13 +58,18 @@ A cart-like structure which holds the selected flights, ready for purchase.
 }
 ```
 
+**Path**: `/orders/:ordersId/flights/:flightId`
+
+**Method:** `yepjet.orders.addFlight(orderId, flightId)`
+
+
 ### Traveler
 
 Allows creation and retrieval of travelers, which include payment details and ticket-specific properties.
 
 **Path**: `/travelers`
 
-**Method:** `#traveles.create()`
+**Method:** `yepjet.travelers.create(params)`
 
 **Params:**
 ```js
@@ -89,14 +93,7 @@ Allows creation and retrieval of travelers, which include payment details and ti
 
 **Path**: `/travelers/:id`
 
-**Method:** `#travelers.fetch()`
-
-**Params:**
-```js
-{
-  id: 'xxxx-xxxx-xxxxxxxxx' // TRAVELER ID
-}
-```
+**Method:** `yepjet.travelers.fetch(travelerId)`
 
 ### Bookings
 
@@ -104,7 +101,7 @@ The final booking call, which allows to book the selected itinerary through a pr
 
 **Path**: `/bookings`
 
-**Method:** `#bookings.create()`
+**Method:** `yepjet.bookings.create(params)`
 
 **Params:**
 ```js
