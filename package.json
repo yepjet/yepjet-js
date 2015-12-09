@@ -3,7 +3,6 @@
   "version": "0.0.1",
   "description": "javascript bindings to yepjet",
   "main": "lib/yepjet.js",
-  "private": true,
   "scripts": {
     "test": "./node_modules/.bin/gulp && ./node_modules/.bin/mocha"
   },
