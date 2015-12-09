@@ -48,8 +48,8 @@ describe('Bookings', function() {
           return Q.all([
             message.should.have.deep.property('body.error'),
             message.body.message['obj.order_id'][0].msg[0].should.equal('error.path.missing'),
-            message.body.message['obj.payment'][0].msg[0].should.equal('error.path.missing'),
-            message.body.message['obj.traveler'][0].msg[0].should.equal('error.path.missing')
+            message.body.message['obj.payment_token'][0].msg[0].should.equal('error.path.missing'),
+            message.body.message['obj.travelers'][0].msg[0].should.equal('error.path.missing')
           ]);
         });
       });
@@ -61,8 +61,8 @@ describe('Bookings', function() {
       before(function() {
         req = yepjet.bookings.create({
           order_id: null,
-          payment: {},
-          traveler: 123
+          payment_token: {},
+          travelers: 123
         });
       });
 
@@ -75,20 +75,8 @@ describe('Bookings', function() {
           return Q.all([
             message.should.have.deep.property('body.error'),
             message.body.message['obj.order_id'][0].msg[0].should.equal('error.expected.jsstring'),
-            message.body.message['obj.traveler.prefix'][0].msg[0].should.equal('error.path.missing'),
-            message.body.message['obj.traveler.address'][0].msg[0].should.equal('error.path.missing'),
-            message.body.message['obj.traveler.first_name'][0].msg[0].should.equal('error.path.missing'),
-            message.body.message['obj.traveler.last_name'][0].msg[0].should.equal('error.path.missing'),
-            // message.body.message['obj.traveler.delivery_info'][0].msg[0].should.equal('error.path.missing'),
-            message.body.message['obj.traveler.birth_date'][0].msg[0].should.equal('error.path.missing'),
-            message.body.message['obj.traveler.gender'][0].msg[0].should.equal('error.path.missing'),
-            message.body.message['obj.traveler.email'][0].msg[0].should.equal('error.path.missing'),
-            message.body.message['obj.traveler.phone_number'][0].msg[0].should.equal('error.path.missing'),
-            message.body.message['obj.payment.number'][0].msg[0].should.equal('error.path.missing'),
-            message.body.message['obj.payment.cvv'][0].msg[0].should.equal('error.path.missing'),
-            message.body.message['obj.payment.billing_address'][0].msg[0].should.equal('error.path.missing'),
-            message.body.message['obj.payment.exp_date'][0].msg[0].should.equal('error.path.missing'),
-            message.body.message['obj.payment.full_name'][0].msg[0].should.equal('error.path.missing')
+            message.body.message['obj.travelers'][0].msg[0].should.equal('error.expected.jsarray'),
+            message.body.message['obj.payment_token'][0].msg[0].should.equal('error.expected.jsstring')
           ]);
         });
       });
@@ -96,38 +84,9 @@ describe('Bookings', function() {
 
     describe('when the booking data is correct', function() {
       var bookingData = {
-        traveler: {
-          prefix: 'Mr.',
-          first_name: 'Jon',
-          last_name: 'Snow',
-          gender: 'M',
-          email: 'you@knownothing.com',
-          birth_date: moment().subtract(20, 'years').toDate(),
-          phone_number: '0123456789',
-          address: {
-            street: 'Tower A',
-            city: 'The Wall',
-            state: 'North',
-            postal_code: '12345',
-            country: 'GB'
-          }
-        },
-        payment: {
-          billing_address: {
-            street: 'Tower A',
-            city: 'The Wall',
-            state: 'North',
-            postal_code: '12345',
-            country: 'GB'
-          },
-          number: '4141414141414141',
-          full_name: 'Jon Snow',
-          exp_date: '05/19',
-          cvv: '123'
-        } 
+        travelers: [{ id: '11efaf6f-ae0a-478e-bd64-6c974d5a3f14' }],
+        payment_token: '0e7fbee2-51be-4b58-a797-f4fcd0a14621'
       };
-
-      bookingData.delivery_info = bookingData.traveler.address;
 
       describe('but the order_id is fake', function() {
         var req;
@@ -137,24 +96,43 @@ describe('Bookings', function() {
           req = yepjet.bookings.create(bookingData);
         });
 
-        it('should return a 404 error', function() {
-          return req.should.be.rejectedWith(/404/);
+        it('should return a 400 error', function() {
+          return req.should.be.rejectedWith(/400/);
         });
       });
 
-      describe.skip('but the order_id is good to go', function() {
-        var req;
+      describe('but the order_id is good to go', function() {
+        describe('when the order is empty', function() {
+          var req;
 
-        before(function() {
-          bookingData.order_id = orderId;
-          req = yepjet.bookings.create(bookingData);
+          before(function() {
+            req = yepjet.orders.create().then(function(response) {
+              bookingData.order_id = response.id;
+              return yepjet.bookings.create(bookingData);
+            });
+          });
+
+          it('should return a 400 error', function() {
+            return req.should.be.rejectedWith(/400/);
+          });
         });
 
-        it('should work and return the correct data', function() {
-          return req.should.be.fulfilled.then(function(res) {
-            return Q.all([
-              res.pnr.should.exist
-            ]);
+        describe('when the order is not empty', function() {
+          var req;
+
+          before(function() {
+            bookingData.order_id = orderId;
+          });
+
+          it('should work and return the correct data', function() {
+            var req = yepjet.bookings.create(bookingData);
+            return req.should.be.fulfilled.then(function(res) {
+              return Q.all([
+                res.pnr.should.exist,
+                res.id.should.exist,
+                res.flights.should.have.length(1)
+              ]);
+            });
           });
         });
       });
