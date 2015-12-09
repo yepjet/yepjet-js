@@ -13,7 +13,7 @@ The entry point to the REST APi. Allow searching of multiple flights and passeng
 
 **Path**: `/search`
 
-**Method:** _POST_
+**Method:** `#search()`
 
 **Params:**
 ```js
@@ -35,7 +35,7 @@ Provides details about the selected flights.
 
 **Path**: `/flights/:id`
 
-**Method:** _GET_
+**Method:** `#flights.fetch()`
 
 **Params:**
 ```js
@@ -50,7 +50,7 @@ A cart-like structure which holds the selected flights, ready for purchase.
 
 **Path**: `/orders`
 
-**Method:** _POST_
+**Method:** `#orders.create()`
 
 **Params:**
 ```js
@@ -65,7 +65,7 @@ Allows creation and retrieval of travelers, which include payment details and ti
 
 **Path**: `/travelers`
 
-**Method:** _POST_
+**Method:** `#traveles.create()`
 
 **Params:**
 ```js
@@ -89,7 +89,7 @@ Allows creation and retrieval of travelers, which include payment details and ti
 
 **Path**: `/travelers/:id`
 
-**Method:** _GET_
+**Method:** `#travelers.fetch()`
 
 **Params:**
 ```js
@@ -104,7 +104,7 @@ The final booking call, which allows to book the selected itinerary through a pr
 
 **Path**: `/bookings`
 
-**Method:** _POST_
+**Method:** `#bookings.create()`
 
 **Params:**
 ```js
