@@ -30,7 +30,7 @@ describe('ApiResource', function() {
 
   describe('baseUrl', function() {
     it('returns the resource base url', function() {
-      resource.baseUrl.should.equal('http://' + host + '/' + version);
+      resource.baseUrl.should.equal('https://' + host + '/' + version);
     });
 
     it('returns a valid URL', function() {

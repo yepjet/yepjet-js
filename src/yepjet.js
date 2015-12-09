@@ -10,7 +10,7 @@ import Bookings   from './resources/Bookings';
 const privateProps = new WeakMap();
 
 class YepJet {
-  constructor(key = null, host = 'localhost:9000', apiVersion = 'v1') {
+  constructor(key = null, host = 'sandbox.yepjet.com', apiVersion = 'v1') {
     privateProps.set(this, { apiKey: key, host: host, version: apiVersion }); 
     let props       = privateProps.get(this);
     this.search     = Object.freeze(new Search(props));

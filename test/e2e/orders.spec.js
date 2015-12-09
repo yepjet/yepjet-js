@@ -99,7 +99,7 @@ describe('Orders', function() {
         req = yepjet.orders.addFlight(orderId, flightId);
       });
 
-      it('should return a 404 error', function() {
+      it('should work', function() {
         return req.should.be.fulfilled.then(function(order) {
           return Q.all([
             order.id.should.exist,

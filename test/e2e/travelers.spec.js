@@ -9,7 +9,7 @@ var inspect      = require('util').inspect;
 var fs          = require('fs');
 var _           = require('underscore');
 
-describe.only('Travelers', function() {
+describe('Travelers', function() {
   var jonSnow = {
     prefix: 'Mr.',
     first_name: 'Jon',
