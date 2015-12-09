@@ -7,9 +7,9 @@ var moment    = require('moment');
 var logJSON = require('../support/log-json.js');
 var inspect      = require('util').inspect;
 var fs          = require('fs');
+var _           = require('underscore');
 
 describe.only('Travelers', function() {
-  var travelerId;
   var jonSnow = {
     prefix: 'Mr.',
     first_name: 'Jon',
@@ -110,11 +110,8 @@ describe.only('Travelers', function() {
 
       it('should work', function() {
         return req.should.be.fulfilled.then(function(response) {
-          console.log(response.id);
-          travelerId = response.id;
-          return Q.all([
-            response.id.should.exist
-          ]);
+          jonSnow.id = response.id;
+          return response.should.deep.equal(jonSnow);
         });
       });
     });
@@ -137,22 +134,12 @@ describe.only('Travelers', function() {
       var req;
 
       before(function() {
-        req = yepjet.travelers.fetch(travelerId);
+        req = yepjet.travelers.fetch(jonSnow.id);
       });
 
       it('should work', function() {
         return req.should.be.fulfilled.then(function(response) {
-          return Q.all([
-            response.id.should.equal(travelerId),
-            response.first_name.should.equal(jonSnow.first_name),
-            response.last_name.should.equal(jonSnow.last_name),
-            response.prefix.should.equal(jonSnow.prefix),
-            response.birthdate.should.equal(jonSnow.birthdate),
-            response.address.should.equal(jonSnow.address),
-            response.phone_number.should.equal(jonSnow.phone_number),
-            response.email.should.equal(jonSnow.email),
-            response.gender.should.equal(jonSnow.gender)
-          ]);
+          return response.should.deep.equal(jonSnow);
         });
       });
     });
