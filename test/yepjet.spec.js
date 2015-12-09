@@ -1,11 +1,12 @@
 'use strict';
 
-var yepjet   = require('../lib/yepjet.js')('test_key');
-var Search   = require('../lib/resources/Search.js').default;
-var Flights  = require('../lib/resources/Flights.js').default;
-var Orders   = require('../lib/resources/Orders.js').default;
-var Bookings = require('../lib/resources/Bookings.js').default;
-var version  = require('../package.json').version;
+var yepjet    = require('../lib/yepjet.js')('test_key');
+var Search    = require('../lib/resources/Search.js').default;
+var Flights   = require('../lib/resources/Flights.js').default;
+var Orders    = require('../lib/resources/Orders.js').default;
+var Travelers = require('../lib/resources/Travelers.js').default;
+var Bookings  = require('../lib/resources/Bookings.js').default;
+var version   = require('../package.json').version;
 
 describe('yepjet', function() {
   it('should have the search', function() {
@@ -18,6 +19,10 @@ describe('yepjet', function() {
 
   it('should have the orders', function() {
     yepjet.orders.should.be.an.instanceOf(Orders);
+  });
+
+  it('should have the travelers', function() {
+    yepjet.travelers.should.be.an.instanceOf(Travelers);
   });
 
   it('should have the bookings', function() {

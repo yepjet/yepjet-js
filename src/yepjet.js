@@ -4,6 +4,7 @@ import {version}  from '../package.json';
 import Search     from './resources/Search';
 import Flights    from './resources/Flights';
 import Orders     from './resources/Orders';
+import Travelers  from './resources/Travelers';
 import Bookings   from './resources/Bookings';
 
 const privateProps = new WeakMap();
@@ -11,11 +12,12 @@ const privateProps = new WeakMap();
 class YepJet {
   constructor(key = null, host = 'localhost:9000', apiVersion = 'v1') {
     privateProps.set(this, { apiKey: key, host: host, version: apiVersion }); 
-    let props     = privateProps.get(this);
-    this.search   = Object.freeze(new Search(props));
-    this.flights  = Object.freeze(new Flights(props));
-    this.orders   = Object.freeze(new Orders(props));
-    this.bookings = Object.freeze(new Bookings(props));
+    let props       = privateProps.get(this);
+    this.search     = Object.freeze(new Search(props));
+    this.flights    = Object.freeze(new Flights(props));
+    this.orders     = Object.freeze(new Orders(props));
+    this.travelers  = Object.freeze(new Travelers(props));
+    this.bookings   = Object.freeze(new Bookings(props));
   }
 
   set apiKey(key) {
