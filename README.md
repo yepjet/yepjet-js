@@ -4,7 +4,7 @@ Welcome to the JavaScript SDK for YepJet, the simple flight booking API.
 
 ## Install
 
-`npm i yepjet`
+`npm i --save yepjet`
 
 ## API
 
